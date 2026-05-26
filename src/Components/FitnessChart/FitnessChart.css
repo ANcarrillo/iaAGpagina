@@ -1,0 +1,15 @@
+.chart-wrapper {
+  width: 100%;
+  background: var(--blanco);
+  border-radius: var(--radio);
+  padding: 8px 0;
+}
+
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+  color: var(--gris-400);
+  font-size: 14px;
+}

@@ -1,0 +1,18 @@
+.footer {
+  background: var(--azul);
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  padding: 16px;
+  margin-top: auto;
+}
+
+.footer-text {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.footer-sub {
+  font-size: 11px;
+  margin-top: 4px;
+  opacity: 0.7;
+}

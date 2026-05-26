@@ -1,0 +1,122 @@
+.home { display: flex; flex-direction: column; gap: 28px; }
+
+.home-loading, .home-error {
+  text-align: center;
+  padding: 60px;
+  font-size: 16px;
+  color: var(--gris-600);
+}
+.home-error { color: var(--rojo); }
+
+.home-hero {
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+  color: #fff;
+  border-radius: var(--radio);
+  padding: 36px 32px;
+  text-align: center;
+  box-shadow: var(--sombra-md);
+}
+
+.home-hero-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.home-hero-sub {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 16px;
+}
+
+.home-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.home-badge--ok   { background: rgba(255,255,255,0.25); }
+.home-badge--warn { background: rgba(255,160,0,0.35); }
+
+.home-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.home-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gris-800);
+  margin-bottom: 10px;
+}
+
+.home-semestres {
+  background: var(--blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 18px 20px;
+}
+
+.home-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.home-chip {
+  background: var(--azul-bg);
+  color: var(--azul);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.home-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.home-btn {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 20px;
+  border: none;
+  border-radius: var(--radio);
+  font-size: 15px;
+  font-weight: 600;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.home-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+.home-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.home-btn--primary { background: var(--azul);  color: #fff; }
+.home-btn--success { background: var(--verde); color: #fff; }
+
+.home-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.home-info-card {
+  background: var(--blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 20px;
+  border-top: 3px solid var(--azul);
+}
+
+.home-info-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--azul);
+  margin-bottom: 8px;
+}
+
+.home-info-card p {
+  font-size: 13px;
+  color: var(--gris-600);
+  line-height: 1.6;
+}
