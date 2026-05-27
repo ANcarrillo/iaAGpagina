@@ -1,6 +1,7 @@
-const BASE_URL = 'https://giecom.com.co/HorarioGenetico'
-// Desarrollo local → cambiar a:
-// const BASE_URL = 'http://localhost:8000'
+// En desarrollo: las peticiones van a /api/... → Vite las proxea a giecom.com.co/HorarioGenetico
+// En producción (build): BASE_URL debe apuntar al servidor real.
+// Para apuntar al backend local: cambia BASE_URL a 'http://localhost:8000'
+const BASE_URL = ''
 
 async function request(path, options = {}, timeout = 30000) {
   const controller = new AbortController()
