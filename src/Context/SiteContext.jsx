@@ -16,6 +16,9 @@ export function SiteProvider({ children }) {
   const [loadingData, setLoadingData] = useState(false)
   const [errorData,   setErrorData]   = useState(null)
 
+  // ── Estadísticas ───────────────────────────────────────────────────
+  const [estadisticas, setEstadisticas] = useState(null)
+
   // ── Optimización ───────────────────────────────────────────────────
   const [optStatus,    setOptStatus]    = useState('idle')   // idle | running | done | error
   const [historial,    setHistorial]    = useState([])
@@ -51,10 +54,33 @@ export function SiteProvider({ children }) {
       setFranjas(data.franjas     || [])
       setSesiones(data.sesiones   || [])
       setResumen(data.resumen     || {})
+
+      // Restaurar último horario guardado (si existe)
+      try {
+        const ultimo = await api.getUltimoHorario()
+        if (ultimo?.horario?.length > 0) {
+          setHorarioFinal(ultimo.horario)
+          setMejorFitness(ultimo.fitness    || 0)
+          setConflictos(ultimo.conflictos   || 0)
+          setOptStatus('done')
+        }
+      } catch (_) { /* No hay horario previo — es normal */ }
+
     } catch (e) {
       setErrorData(e.message)
     } finally {
       setLoadingData(false)
+    }
+  }, [api])
+
+  // ── Cargar estadísticas ────────────────────────────────────────────
+  const cargarEstadisticas = useCallback(async () => {
+    try {
+      const data = await api.getEstadisticas()
+      setEstadisticas(data)
+      return data
+    } catch (_) {
+      return null
     }
   }, [api])
 
@@ -210,6 +236,8 @@ export function SiteProvider({ children }) {
       agregarFranja, editarFranja, eliminarFranja,
       resetearDatos, importarDatos,
       semestresDisponibles,
+      // estadísticas
+      estadisticas, cargarEstadisticas,
       // optimización
       optStatus, historial, horarioFinal, mejorFitness,
       conflictos, conflictosDetalle, razonParada, generaciones, errorOpt,

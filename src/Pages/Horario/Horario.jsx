@@ -4,6 +4,8 @@ import FitnessChart from '../../Components/FitnessChart/FitnessChart'
 import { useNavigate } from 'react-router-dom'
 import './Horario.css'
 
+const TIPO_ICON = { aula: '🏫', laboratorio: '🔬', auditorio: '🎭' }
+
 export default function Horario() {
   const {
     optStatus, horarioFinal, mejorFitness,
@@ -95,13 +97,15 @@ export default function Horario() {
               <tr>
                 <th>#</th>
                 <th>Materia</th>
-                <th>Grupo</th>
+                <th>Gr.</th>
                 <th>Sem.</th>
                 <th>Docente</th>
                 <th>Salón</th>
+                <th>Tipo</th>
                 <th>Día</th>
                 <th>Inicio</th>
                 <th>Fin</th>
+                <th>Hrs.</th>
               </tr>
             </thead>
             <tbody>
@@ -113,9 +117,11 @@ export default function Horario() {
                   <td>{s.semestre}</td>
                   <td>{s.profesor}</td>
                   <td>{s.salon}</td>
+                  <td><span className={`horario-tipo horario-tipo--${s.salon_tipo || 'aula'}`}>{TIPO_ICON[s.salon_tipo || 'aula']}</span></td>
                   <td>{s.dia}</td>
                   <td>{s.hora_inicio}</td>
                   <td>{s.hora_fin}</td>
+                  <td>{s.duracion_horas ?? '—'}</td>
                 </tr>
               ))}
             </tbody>

@@ -10,12 +10,12 @@
 
 .horario-title { font-size: 22px; font-weight: 700; color: var(--azul); }
 
-/* ── Empty state ─────────────────────────────────────────────── */
+/* ── Empty state ──────────────────────────────────────────────── */
 .horario-empty {
   background: var(--blanco);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
-  padding: 60px 32px;
+  padding: 60px 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -25,11 +25,7 @@
 
 .horario-empty-icon { font-size: 52px; line-height: 1; }
 
-.horario-empty-msg {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--gris-800);
-}
+.horario-empty-msg  { font-size: 18px; font-weight: 700; color: var(--gris-800); }
 
 .horario-empty-sub {
   font-size: 14px;
@@ -39,49 +35,49 @@
   margin-bottom: 8px;
 }
 
-/* ── Summary strip ───────────────────────────────────────────── */
+/* ── Summary strip ────────────────────────────────────────────── */
 .horario-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
   background: var(--blanco);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
-  padding: 20px 24px;
+  padding: 18px 22px;
 }
 
 .horario-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 80px;
+  min-width: 72px;
 }
 
 .horario-stat-val {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--azul);
   line-height: 1;
 }
 
+@media (min-width: 768px) { .horario-stat-val { font-size: 32px; } }
+
 .horario-stat-lbl { font-size: 12px; color: var(--gris-600); margin-top: 4px; }
 
-.horario-stat--ok .horario-stat-val { color: var(--verde); }
+.horario-stat--ok .horario-stat-val  { color: var(--verde); }
 .horario-stat--err .horario-stat-val { color: var(--rojo); }
 
-.horario-razon {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--verde);
-}
+.horario-razon { font-size: 13px; font-weight: 600; color: var(--verde); }
 
-/* ── Cards ───────────────────────────────────────────────────── */
+/* ── Cards ────────────────────────────────────────────────────── */
 .horario-card {
   background: var(--blanco);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
-  padding: 24px;
+  padding: 20px;
 }
+
+@media (min-width: 768px) { .horario-card { padding: 24px; } }
 
 .horario-card--warn { background: #FFF8E1; border: 1.5px solid #FFD54F; }
 
@@ -92,9 +88,9 @@
   margin-bottom: 14px;
 }
 
-/* ── Buttons ─────────────────────────────────────────────────── */
+/* ── Botones ──────────────────────────────────────────────────── */
 .horario-btn {
-  padding: 10px 24px;
+  padding: 10px 22px;
   border: none;
   border-radius: var(--radio);
   font-size: 14px;
@@ -103,12 +99,11 @@
   cursor: pointer;
 }
 
-.horario-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.horario-btn:hover          { opacity: 0.85; transform: translateY(-1px); }
+.horario-btn--primary       { background: var(--azul);     color: #fff; }
+.horario-btn--secondary     { background: var(--gris-200); color: var(--gris-800); }
 
-.horario-btn--primary   { background: var(--azul);     color: #fff; }
-.horario-btn--secondary { background: var(--gris-200); color: var(--gris-800); }
-
-/* ── Conflict list ───────────────────────────────────────────── */
+/* ── Conflict list ────────────────────────────────────────────── */
 .horario-conflict-list { display: flex; flex-direction: column; gap: 8px; }
 
 .horario-conflict-item {
@@ -124,16 +119,14 @@
 .horario-conflict-title { font-size: 13px; font-weight: 700; }
 .horario-conflict-body  { font-size: 12px; color: var(--gris-600); }
 
-/* ── Detail table ────────────────────────────────────────────── */
-.horario-table-wrap {
-  overflow-x: auto;
-}
+/* ── Tabla detallada ──────────────────────────────────────────── */
+.horario-table-wrap { overflow-x: auto; }
 
 .horario-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  min-width: 700px;
+  min-width: 760px;
 }
 
 .horario-table th {
@@ -147,14 +140,14 @@
 }
 
 .horario-table td {
-  padding: 8px 10px;
+  padding: 7px 10px;
   border-bottom: 1px solid var(--gris-200);
   white-space: nowrap;
 }
 
 .horario-table tr:hover td { background: var(--azul-bg); }
 
-.horario-td--num { color: var(--gris-600); text-align: center; }
+.horario-td--num { color: var(--gris-600); text-align: center; width: 36px; }
 
 .horario-grupo {
   background: var(--azul-bg);
@@ -163,4 +156,9 @@
   font-size: 11px;
   border-radius: 10px;
   padding: 2px 8px;
+}
+
+.horario-tipo {
+  font-size: 16px;
+  line-height: 1;
 }

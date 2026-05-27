@@ -19,18 +19,31 @@
   --gris-600:    #757575;
   --gris-800:    #424242;
   --blanco:      #FFFFFF;
-  --sombra:      0 2px 8px rgba(0,0,0,0.10);
-  --sombra-md:   0 4px 16px rgba(0,0,0,0.13);
+  --sombra:      0 2px 8px rgba(0,0,0,0.09);
+  --sombra-md:   0 4px 18px rgba(0,0,0,0.12);
   --radio:       10px;
   --radio-sm:    6px;
   --fuente:      'Inter', sans-serif;
 }
+
+html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--fuente);
   background: var(--gris-100);
   color: var(--gris-800);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--azul-bg);
+  color: var(--azul);
+}
+
+:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
 }
 
 button {
@@ -46,3 +59,9 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+/* Scrollbar sutil */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gris-400); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gris-600); }

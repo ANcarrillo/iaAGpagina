@@ -10,6 +10,7 @@
 
 .datos-title { font-size: 22px; font-weight: 700; color: var(--azul); }
 
+/* ── Tabs ─────────────────────────────────────────────────────── */
 .datos-tabs {
   display: flex;
   gap: 4px;
@@ -22,7 +23,7 @@
 
 .datos-tab {
   flex: 1;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border: none;
   border-radius: var(--radio-sm);
   background: transparent;
@@ -30,6 +31,7 @@
   font-weight: 500;
   color: var(--gris-600);
   transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
 }
 
 .datos-tab:hover { background: var(--gris-100); color: var(--gris-800); }
@@ -40,19 +42,44 @@
   font-weight: 600;
 }
 
+/* ── Content ──────────────────────────────────────────────────── */
 .datos-content {
   background: var(--blanco);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
-  padding: 24px;
+  padding: 20px;
 }
 
-.tab-section { display: flex; flex-direction: column; gap: 24px; }
+@media (min-width: 768px) {
+  .datos-content { padding: 24px; }
+}
 
+/* ── Tab section: columna → lado a lado en desktop ────────────── */
+.tab-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 960px) {
+  .tab-section {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .datos-form {
+    min-width: 340px;
+    max-width: 400px;
+    flex-shrink: 0;
+  }
+  .datos-list { flex: 1; min-width: 0; }
+}
+
+/* ── Formulario ───────────────────────────────────────────────── */
 .datos-form {
   background: var(--gris-100);
   border-radius: var(--radio);
-  padding: 20px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -75,25 +102,42 @@
 .form-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-width: 140px;
+  min-width: 120px;
+  flex: 1;
 }
 
-.form-field--wide { flex: 2; min-width: 260px; }
+.form-field--wide { flex: 2; min-width: 220px; }
+
+.form-field--check {
+  justify-content: flex-end;
+  min-width: auto;
+  flex: none;
+}
 
 .form-field label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--gris-600);
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
+
+.form-label-hint {
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--verde);
+  margin-left: 4px;
+}
+
+.form-label-hint--red { color: var(--rojo); }
 
 .form-field input,
 .form-field select {
@@ -103,13 +147,36 @@
   font-size: 14px;
   outline: none;
   transition: border-color 0.15s;
+  background: var(--blanco);
 }
 
 .form-field input:focus,
 .form-field select:focus { border-color: var(--azul); }
 
-.form-actions { display: flex; gap: 10px; }
+.check-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gris-800);
+  cursor: pointer;
+  padding: 8px 0;
+}
 
+.check-inline input { width: 16px; height: 16px; cursor: pointer; }
+
+/* Dos columnas para franjas preferidas/bloqueadas */
+.form-two-col {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.form-two-col .form-field { flex: 1; min-width: 200px; }
+
+.form-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ── Botones ──────────────────────────────────────────────────── */
 .datos-btn {
   padding: 9px 20px;
   border: none;
@@ -125,6 +192,7 @@
 .datos-btn--secondary { background: var(--gris-200); color: var(--gris-800); }
 .datos-btn--warn      { background: #E65100; color: #fff; }
 
+/* ── Lista / tabla ────────────────────────────────────────────── */
 .datos-list { display: flex; flex-direction: column; gap: 8px; }
 
 .datos-count {
@@ -133,10 +201,13 @@
   font-weight: 500;
 }
 
+.datos-table-wrap { overflow-x: auto; }
+
 .datos-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
+  min-width: 440px;
 }
 
 .datos-table th {
@@ -146,6 +217,7 @@
   text-align: left;
   font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .datos-table td {
@@ -155,11 +227,14 @@
 
 .datos-table tr:hover td { background: var(--azul-bg); }
 
+.td-list { max-width: 260px; white-space: normal; line-height: 1.5; }
+
+/* ── Botones de tabla ─────────────────────────────────────────── */
 .tbl-btn {
   background: none;
   border: none;
-  font-size: 16px;
-  padding: 2px 6px;
+  font-size: 15px;
+  padding: 2px 5px;
   cursor: pointer;
   border-radius: 4px;
   transition: background 0.1s;
@@ -167,11 +242,12 @@
 
 .tbl-btn:hover { background: var(--gris-200); }
 
+/* ── Multi check ──────────────────────────────────────────────── */
 .multi-check {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  max-height: 160px;
+  gap: 6px;
+  max-height: 150px;
   overflow-y: auto;
   background: var(--blanco);
   border: 1.5px solid var(--gris-400);
@@ -179,16 +255,35 @@
   padding: 10px;
 }
 
+.multi-check--sm { max-height: 120px; }
+
 .check-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
+  gap: 5px;
+  font-size: 12px;
   cursor: pointer;
   white-space: nowrap;
-  padding: 4px 8px;
+  padding: 3px 7px;
   border-radius: 4px;
   transition: background 0.1s;
 }
 
-.check-item:hover { background: var(--gris-100); }
+.check-item:hover          { background: var(--gris-100); }
+.check-item--blocked:hover { background: var(--rojo-bg); }
+
+.check-item--blocked { color: var(--gris-600); }
+
+/* ── Tipo badge (salones) ─────────────────────────────────────── */
+.tipo-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.tipo-badge--aula        { background: var(--azul-bg);  color: var(--azul); }
+.tipo-badge--laboratorio { background: #F3E5F5;          color: #6A1B9A; }
+.tipo-badge--auditorio   { background: #FFF3E0;          color: #E65100; }

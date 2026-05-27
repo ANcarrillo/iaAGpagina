@@ -7,14 +7,22 @@
 }
 
 .header-inner {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  height: 64px;
+  height: 60px;
+}
+
+@media (min-width: 768px) {
+  .header-inner { padding: 0 24px; height: 64px; }
+}
+
+@media (min-width: 1200px) {
+  .header-inner { padding: 0 32px; }
 }
 
 .header-brand {
@@ -24,14 +32,12 @@
   flex-shrink: 0;
 }
 
-.header-logo {
-  font-size: 28px;
-}
+.header-logo { font-size: 26px; }
 
 .header-title {
   color: #fff;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.2;
 }
 
@@ -43,39 +49,45 @@
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .header-link {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
+  padding: 8px 10px;
   border-radius: var(--radio-sm);
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.80);
   font-size: 14px;
   font-weight: 500;
   transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
 }
 
 .header-link:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.13);
   color: #fff;
 }
 
 .header-link--active {
-  background: rgba(255,255,255,0.20);
+  background: rgba(255,255,255,0.22);
   color: #fff;
   font-weight: 600;
 }
 
-.header-link-icon {
-  font-size: 16px;
+.header-link-icon { font-size: 16px; line-height: 1; }
+
+/* Móvil: solo iconos */
+@media (max-width: 640px) {
+  .header-link-label  { display: none; }
+  .header-link        { padding: 8px 9px; }
+  .header-title       { font-size: 13px; }
+  .header-subtitle    { display: none; }
+  .header-logo        { font-size: 22px; }
 }
 
-@media (max-width: 700px) {
-  .header-link-label { display: none; }
-  .header-link { padding: 8px 10px; }
-  .header-title { font-size: 14px; }
-  .header-subtitle { display: none; }
+/* Tablet: labels más cortos */
+@media (min-width: 641px) and (max-width: 900px) {
+  .header-link { padding: 8px 10px; font-size: 13px; }
 }

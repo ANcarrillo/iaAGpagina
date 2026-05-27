@@ -45,7 +45,8 @@ export default function Datos() {
 
 function TabMaterias({ ctx }) {
   const { materias, agregarMateria, editarMateria, eliminarMateria } = ctx
-  const [form, setForm] = useState({ nombre: '', semestre: 1, grupo: 'A', creditos: 3, bloques: '2,2' })
+  const BLANK = { nombre: '', semestre: 1, grupo: 'A', creditos: 3, bloques: '2,2', num_alumnos: 30, requiere_laboratorio: false }
+  const [form, setForm] = useState(BLANK)
   const [editId, setEditId] = useState(null)
   const [error, setError] = useState('')
 
@@ -53,26 +54,26 @@ function TabMaterias({ ctx }) {
     e.preventDefault()
     setError('')
     const body = {
-      nombre:   form.nombre.trim(),
-      semestre: Number(form.semestre),
-      grupo:    form.grupo.toUpperCase(),
-      creditos: Number(form.creditos),
-      bloques:  form.bloques.split(',').map(b => Number(b.trim())).filter(Boolean),
+      nombre:               form.nombre.trim(),
+      semestre:             Number(form.semestre),
+      grupo:                form.grupo.toUpperCase(),
+      creditos:             Number(form.creditos),
+      bloques:              form.bloques.split(',').map(b => Number(b.trim())).filter(Boolean),
+      num_alumnos:          Number(form.num_alumnos),
+      requiere_laboratorio: Boolean(form.requiere_laboratorio),
     }
     try {
-      if (editId) {
-        await editarMateria(editId, body)
-        setEditId(null)
-      } else {
-        await agregarMateria(body)
-      }
-      setForm({ nombre: '', semestre: 1, grupo: 'A', creditos: 3, bloques: '2,2' })
+      if (editId) { await editarMateria(editId, body); setEditId(null) }
+      else          await agregarMateria(body)
+      setForm(BLANK)
     } catch (e) { setError(e.message) }
   }
 
   const handleEdit = (m) => {
     setEditId(m.id)
-    setForm({ nombre: m.nombre, semestre: m.semestre, grupo: m.grupo, creditos: m.creditos, bloques: m.bloques.join(',') })
+    setForm({ nombre: m.nombre, semestre: m.semestre, grupo: m.grupo, creditos: m.creditos,
+              bloques: m.bloques.join(','), num_alumnos: m.num_alumnos ?? 30,
+              requiere_laboratorio: m.requiere_laboratorio ?? false })
   }
 
   return (
@@ -87,19 +88,34 @@ function TabMaterias({ ctx }) {
           </div>
           <div className="form-field">
             <label>Semestre</label>
-            <input type="number" min={1} max={10} value={form.semestre} onChange={e => setForm(p => ({...p, semestre: e.target.value}))} />
+            <input type="number" min={1} max={10} value={form.semestre}
+              onChange={e => setForm(p => ({...p, semestre: e.target.value}))} />
           </div>
           <div className="form-field">
             <label>Grupo</label>
-            <input maxLength={2} value={form.grupo} onChange={e => setForm(p => ({...p, grupo: e.target.value}))} />
+            <input maxLength={2} value={form.grupo}
+              onChange={e => setForm(p => ({...p, grupo: e.target.value}))} />
           </div>
           <div className="form-field">
             <label>Créditos</label>
-            <input type="number" min={1} max={10} value={form.creditos} onChange={e => setForm(p => ({...p, creditos: e.target.value}))} />
+            <input type="number" min={1} max={10} value={form.creditos}
+              onChange={e => setForm(p => ({...p, creditos: e.target.value}))} />
           </div>
           <div className="form-field">
             <label>Bloques (ej: 3,2)</label>
             <input value={form.bloques} onChange={e => setForm(p => ({...p, bloques: e.target.value}))} placeholder="2,2" />
+          </div>
+          <div className="form-field">
+            <label>Nº alumnos</label>
+            <input type="number" min={1} max={500} value={form.num_alumnos}
+              onChange={e => setForm(p => ({...p, num_alumnos: e.target.value}))} />
+          </div>
+          <div className="form-field form-field--check">
+            <label className="check-inline">
+              <input type="checkbox" checked={form.requiere_laboratorio}
+                onChange={e => setForm(p => ({...p, requiere_laboratorio: e.target.checked}))} />
+              Requiere laboratorio
+            </label>
           </div>
         </div>
         <div className="form-actions">
@@ -108,7 +124,7 @@ function TabMaterias({ ctx }) {
           </button>
           {editId && (
             <button type="button" className="datos-btn datos-btn--secondary"
-              onClick={() => { setEditId(null); setForm({ nombre: '', semestre: 1, grupo: 'A', creditos: 3, bloques: '2,2' }) }}>
+              onClick={() => { setEditId(null); setForm(BLANK) }}>
               Cancelar
             </button>
           )}
@@ -117,24 +133,30 @@ function TabMaterias({ ctx }) {
 
       <div className="datos-list">
         <p className="datos-count">{materias.length} materia(s)</p>
-        <table className="datos-table">
-          <thead><tr><th>Nombre</th><th>Sem.</th><th>Grupo</th><th>Créditos</th><th>Bloques</th><th></th></tr></thead>
-          <tbody>
-            {materias.map(m => (
-              <tr key={m.id}>
-                <td>{m.nombre}</td>
-                <td>{m.semestre}</td>
-                <td>{m.grupo}</td>
-                <td>{m.creditos}</td>
-                <td>{m.bloques?.join(', ')}</td>
-                <td>
-                  <button className="tbl-btn tbl-btn--edit" onClick={() => handleEdit(m)}>✏️</button>
-                  <button className="tbl-btn tbl-btn--del"  onClick={() => eliminarMateria(m.id)}>🗑️</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="datos-table-wrap">
+          <table className="datos-table">
+            <thead>
+              <tr><th>Nombre</th><th>Sem.</th><th>Gr.</th><th>Cred.</th><th>Bloques</th><th>Alumnos</th><th>Lab.</th><th></th></tr>
+            </thead>
+            <tbody>
+              {materias.map(m => (
+                <tr key={m.id}>
+                  <td>{m.nombre}</td>
+                  <td>{m.semestre}</td>
+                  <td>{m.grupo}</td>
+                  <td>{m.creditos}</td>
+                  <td>{m.bloques?.join(', ')}</td>
+                  <td>{m.num_alumnos ?? 30}</td>
+                  <td>{m.requiere_laboratorio ? '🔬' : '—'}</td>
+                  <td>
+                    <button className="tbl-btn" onClick={() => handleEdit(m)}>✏️</button>
+                    <button className="tbl-btn" onClick={() => eliminarMateria(m.id)}>🗑️</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
@@ -143,8 +165,9 @@ function TabMaterias({ ctx }) {
 // ── PROFESORES ────────────────────────────────────────────────────────────────
 
 function TabProfesores({ ctx }) {
-  const { profesores, materias, agregarProfesor, editarProfesor, eliminarProfesor } = ctx
-  const [form, setForm]   = useState({ nombre: '', materias_ids: [] })
+  const { profesores, materias, franjas, agregarProfesor, editarProfesor, eliminarProfesor } = ctx
+  const BLANK = { nombre: '', materias_ids: [], franjas_preferidas: [], franjas_bloqueadas: [] }
+  const [form, setForm]     = useState(BLANK)
   const [editId, setEditId] = useState(null)
   const [error, setError]   = useState('')
 
@@ -152,25 +175,30 @@ function TabProfesores({ ctx }) {
     e.preventDefault()
     setError('')
     try {
-      const body = { nombre: form.nombre.trim(), materias_ids: form.materias_ids, franjas_preferidas: [] }
+      const body = {
+        nombre:             form.nombre.trim(),
+        materias_ids:       form.materias_ids,
+        franjas_preferidas: form.franjas_preferidas,
+        franjas_bloqueadas: form.franjas_bloqueadas,
+      }
       if (editId) { await editarProfesor(editId, body); setEditId(null) }
       else          await agregarProfesor(body)
-      setForm({ nombre: '', materias_ids: [] })
+      setForm(BLANK)
     } catch (e) { setError(e.message) }
   }
 
-  const toggleMateria = (id) => {
+  const toggleId = (key, id) => {
     setForm(p => ({
       ...p,
-      materias_ids: p.materias_ids.includes(id)
-        ? p.materias_ids.filter(x => x !== id)
-        : [...p.materias_ids, id]
+      [key]: p[key].includes(id) ? p[key].filter(x => x !== id) : [...p[key], id],
     }))
   }
 
   const handleEdit = (p) => {
     setEditId(p.id)
-    setForm({ nombre: p.nombre, materias_ids: p.materias_ids || [] })
+    setForm({ nombre: p.nombre, materias_ids: p.materias_ids || [],
+              franjas_preferidas: p.franjas_preferidas || [],
+              franjas_bloqueadas: p.franjas_bloqueadas || [] })
   }
 
   return (
@@ -184,6 +212,7 @@ function TabProfesores({ ctx }) {
             <input value={form.nombre} onChange={e => setForm(p => ({...p, nombre: e.target.value}))} required />
           </div>
         </div>
+
         <div className="form-field">
           <label>Materias que dicta</label>
           <div className="multi-check">
@@ -191,20 +220,54 @@ function TabProfesores({ ctx }) {
               <label key={m.id} className="check-item">
                 <input type="checkbox"
                   checked={form.materias_ids.includes(m.id)}
-                  onChange={() => toggleMateria(m.id)}
+                  onChange={() => toggleId('materias_ids', m.id)}
                 />
                 {m.nombre} ({m.grupo})
               </label>
             ))}
           </div>
         </div>
+
+        {franjas.length > 0 && (
+          <div className="form-two-col">
+            <div className="form-field">
+              <label>Franjas preferidas <span className="form-label-hint">+bonus fitness</span></label>
+              <div className="multi-check multi-check--sm">
+                {franjas.map(f => (
+                  <label key={f.id} className="check-item">
+                    <input type="checkbox"
+                      checked={form.franjas_preferidas.includes(f.id)}
+                      onChange={() => toggleId('franjas_preferidas', f.id)}
+                    />
+                    {f.dia} {f.hora_inicio}
+                  </label>
+                ))}
+              </div>
+            </div>
+            <div className="form-field">
+              <label>Franjas bloqueadas <span className="form-label-hint form-label-hint--red">restricción dura</span></label>
+              <div className="multi-check multi-check--sm">
+                {franjas.map(f => (
+                  <label key={f.id} className="check-item check-item--blocked">
+                    <input type="checkbox"
+                      checked={form.franjas_bloqueadas.includes(f.id)}
+                      onChange={() => toggleId('franjas_bloqueadas', f.id)}
+                    />
+                    {f.dia} {f.hora_inicio}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="form-actions">
           <button type="submit" className="datos-btn datos-btn--primary">
             {editId ? '💾 Guardar' : '➕ Agregar'}
           </button>
           {editId && (
             <button type="button" className="datos-btn datos-btn--secondary"
-              onClick={() => { setEditId(null); setForm({ nombre: '', materias_ids: [] }) }}>
+              onClick={() => { setEditId(null); setForm(BLANK) }}>
               Cancelar
             </button>
           )}
@@ -213,21 +276,27 @@ function TabProfesores({ ctx }) {
 
       <div className="datos-list">
         <p className="datos-count">{profesores.length} profesor(es)</p>
-        <table className="datos-table">
-          <thead><tr><th>Nombre</th><th>Materias asignadas</th><th></th></tr></thead>
-          <tbody>
-            {profesores.map(p => (
-              <tr key={p.id}>
-                <td>{p.nombre}</td>
-                <td>{p.materias_ids?.map(id => materias.find(m => m.id === id)?.nombre).filter(Boolean).join(', ') || '—'}</td>
-                <td>
-                  <button className="tbl-btn tbl-btn--edit" onClick={() => handleEdit(p)}>✏️</button>
-                  <button className="tbl-btn tbl-btn--del"  onClick={() => eliminarProfesor(p.id)}>🗑️</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="datos-table-wrap">
+          <table className="datos-table">
+            <thead>
+              <tr><th>Nombre</th><th>Materias asignadas</th><th>Pref.</th><th>Bloq.</th><th></th></tr>
+            </thead>
+            <tbody>
+              {profesores.map(p => (
+                <tr key={p.id}>
+                  <td>{p.nombre}</td>
+                  <td className="td-list">{p.materias_ids?.map(id => materias.find(m => m.id === id)?.nombre).filter(Boolean).join(', ') || '—'}</td>
+                  <td>{p.franjas_preferidas?.length || 0}</td>
+                  <td>{p.franjas_bloqueadas?.length || 0}</td>
+                  <td>
+                    <button className="tbl-btn" onClick={() => handleEdit(p)}>✏️</button>
+                    <button className="tbl-btn" onClick={() => eliminarProfesor(p.id)}>🗑️</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
@@ -235,9 +304,13 @@ function TabProfesores({ ctx }) {
 
 // ── SALONES ───────────────────────────────────────────────────────────────────
 
+const TIPO_OPTS  = ['aula', 'laboratorio', 'auditorio']
+const TIPO_ICONS = { aula: '🏫', laboratorio: '🔬', auditorio: '🎭' }
+
 function TabSalones({ ctx }) {
   const { salones, agregarSalon, editarSalon, eliminarSalon } = ctx
-  const [form, setForm]     = useState({ nombre: '', capacidad: 30 })
+  const BLANK = { nombre: '', capacidad: 30, tipo: 'aula' }
+  const [form, setForm]     = useState(BLANK)
   const [editId, setEditId] = useState(null)
   const [error, setError]   = useState('')
 
@@ -245,14 +318,14 @@ function TabSalones({ ctx }) {
     e.preventDefault()
     setError('')
     try {
-      const body = { nombre: form.nombre.trim(), capacidad: Number(form.capacidad) }
+      const body = { nombre: form.nombre.trim(), capacidad: Number(form.capacidad), tipo: form.tipo }
       if (editId) { await editarSalon(editId, body); setEditId(null) }
       else          await agregarSalon(body)
-      setForm({ nombre: '', capacidad: 30 })
+      setForm(BLANK)
     } catch (e) { setError(e.message) }
   }
 
-  const handleEdit = (s) => { setEditId(s.id); setForm({ nombre: s.nombre, capacidad: s.capacidad }) }
+  const handleEdit = (s) => { setEditId(s.id); setForm({ nombre: s.nombre, capacidad: s.capacidad, tipo: s.tipo || 'aula' }) }
 
   return (
     <div className="tab-section">
@@ -266,31 +339,49 @@ function TabSalones({ ctx }) {
           </div>
           <div className="form-field">
             <label>Capacidad</label>
-            <input type="number" min={1} value={form.capacidad} onChange={e => setForm(p => ({...p, capacidad: e.target.value}))} />
+            <input type="number" min={1} value={form.capacidad}
+              onChange={e => setForm(p => ({...p, capacidad: e.target.value}))} />
+          </div>
+          <div className="form-field">
+            <label>Tipo</label>
+            <select value={form.tipo} onChange={e => setForm(p => ({...p, tipo: e.target.value}))}>
+              {TIPO_OPTS.map(t => (
+                <option key={t} value={t}>{TIPO_ICONS[t]} {t.charAt(0).toUpperCase() + t.slice(1)}</option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="form-actions">
           <button type="submit" className="datos-btn datos-btn--primary">{editId ? '💾 Guardar' : '➕ Agregar'}</button>
-          {editId && <button type="button" className="datos-btn datos-btn--secondary" onClick={() => { setEditId(null); setForm({ nombre: '', capacidad: 30 }) }}>Cancelar</button>}
+          {editId && <button type="button" className="datos-btn datos-btn--secondary"
+            onClick={() => { setEditId(null); setForm(BLANK) }}>Cancelar</button>}
         </div>
       </form>
 
       <div className="datos-list">
         <p className="datos-count">{salones.length} salón(es)</p>
-        <table className="datos-table">
-          <thead><tr><th>Nombre</th><th>Capacidad</th><th></th></tr></thead>
-          <tbody>
-            {salones.map(s => (
-              <tr key={s.id}>
-                <td>{s.nombre}</td><td>{s.capacidad}</td>
-                <td>
-                  <button className="tbl-btn tbl-btn--edit" onClick={() => handleEdit(s)}>✏️</button>
-                  <button className="tbl-btn tbl-btn--del"  onClick={() => eliminarSalon(s.id)}>🗑️</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="datos-table-wrap">
+          <table className="datos-table">
+            <thead><tr><th>Nombre</th><th>Capacidad</th><th>Tipo</th><th></th></tr></thead>
+            <tbody>
+              {salones.map(s => (
+                <tr key={s.id}>
+                  <td>{s.nombre}</td>
+                  <td>{s.capacidad}</td>
+                  <td>
+                    <span className={`tipo-badge tipo-badge--${s.tipo || 'aula'}`}>
+                      {TIPO_ICONS[s.tipo || 'aula']} {s.tipo || 'aula'}
+                    </span>
+                  </td>
+                  <td>
+                    <button className="tbl-btn" onClick={() => handleEdit(s)}>✏️</button>
+                    <button className="tbl-btn" onClick={() => eliminarSalon(s.id)}>🗑️</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
@@ -302,7 +393,8 @@ const DIAS_OPT = ['Lunes','Martes','Miércoles','Jueves','Viernes']
 
 function TabFranjas({ ctx }) {
   const { franjas, agregarFranja, editarFranja, eliminarFranja } = ctx
-  const [form, setForm]     = useState({ dia: 'Lunes', hora_inicio: '08:00', hora_fin: '10:00' })
+  const BLANK = { dia: 'Lunes', hora_inicio: '08:00', hora_fin: '10:00' }
+  const [form, setForm]     = useState(BLANK)
   const [editId, setEditId] = useState(null)
   const [error, setError]   = useState('')
 
@@ -312,7 +404,7 @@ function TabFranjas({ ctx }) {
     try {
       if (editId) { await editarFranja(editId, form); setEditId(null) }
       else          await agregarFranja(form)
-      setForm({ dia: 'Lunes', hora_inicio: '08:00', hora_fin: '10:00' })
+      setForm(BLANK)
     } catch (e) { setError(e.message) }
   }
 
@@ -341,26 +433,29 @@ function TabFranjas({ ctx }) {
         </div>
         <div className="form-actions">
           <button type="submit" className="datos-btn datos-btn--primary">{editId ? '💾 Guardar' : '➕ Agregar'}</button>
-          {editId && <button type="button" className="datos-btn datos-btn--secondary" onClick={() => { setEditId(null); setForm({ dia: 'Lunes', hora_inicio: '08:00', hora_fin: '10:00' }) }}>Cancelar</button>}
+          {editId && <button type="button" className="datos-btn datos-btn--secondary"
+            onClick={() => { setEditId(null); setForm(BLANK) }}>Cancelar</button>}
         </div>
       </form>
 
       <div className="datos-list">
         <p className="datos-count">{franjas.length} franja(s)</p>
-        <table className="datos-table">
-          <thead><tr><th>Día</th><th>Hora inicio</th><th>Hora fin</th><th></th></tr></thead>
-          <tbody>
-            {franjas.map(f => (
-              <tr key={f.id}>
-                <td>{f.dia}</td><td>{f.hora_inicio}</td><td>{f.hora_fin}</td>
-                <td>
-                  <button className="tbl-btn tbl-btn--edit" onClick={() => handleEdit(f)}>✏️</button>
-                  <button className="tbl-btn tbl-btn--del"  onClick={() => eliminarFranja(f.id)}>🗑️</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="datos-table-wrap">
+          <table className="datos-table">
+            <thead><tr><th>Día</th><th>Hora inicio</th><th>Hora fin</th><th></th></tr></thead>
+            <tbody>
+              {franjas.map(f => (
+                <tr key={f.id}>
+                  <td>{f.dia}</td><td>{f.hora_inicio}</td><td>{f.hora_fin}</td>
+                  <td>
+                    <button className="tbl-btn" onClick={() => handleEdit(f)}>✏️</button>
+                    <button className="tbl-btn" onClick={() => eliminarFranja(f.id)}>🗑️</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

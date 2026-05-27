@@ -65,5 +65,9 @@ export default function useApi() {
 
     // ── Optimizar ─────────────────────────────────────────────────────
     optimizar: (body) => request('/api/optimizar', { method: 'POST', body: JSON.stringify(body) }, 600000),
+
+    // ── Último horario y estadísticas ─────────────────────────────────
+    getUltimoHorario: () => request('/api/ultimo-horario'),
+    getEstadisticas:  () => request('/api/estadisticas'),
   }
 }

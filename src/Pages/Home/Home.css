@@ -1,4 +1,4 @@
-.home { display: flex; flex-direction: column; gap: 28px; }
+.home { display: flex; flex-direction: column; gap: 24px; }
 
 .home-loading, .home-error {
   text-align: center;
@@ -8,20 +8,25 @@
 }
 .home-error { color: var(--rojo); }
 
+/* ── Hero ─────────────────────────────────────────────────────── */
 .home-hero {
   background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
   color: #fff;
   border-radius: var(--radio);
-  padding: 36px 32px;
+  padding: 32px 24px;
   text-align: center;
   box-shadow: var(--sombra-md);
 }
 
+@media (min-width: 768px) { .home-hero { padding: 44px 40px; } }
+
 .home-hero-title {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 700;
   margin-bottom: 8px;
 }
+
+@media (min-width: 768px) { .home-hero-title { font-size: 34px; } }
 
 .home-hero-sub {
   font-size: 14px;
@@ -40,14 +45,19 @@
 .home-badge--ok   { background: rgba(255,255,255,0.25); }
 .home-badge--warn { background: rgba(255,160,0,0.35); }
 
+/* ── Stats grid ───────────────────────────────────────────────── */
 .home-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
+@media (min-width: 540px)  { .home-stats { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 900px)  { .home-stats { grid-template-columns: repeat(6, 1fr); gap: 14px; } }
+
+/* ── Semestres ────────────────────────────────────────────────── */
 .home-section-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--gris-800);
   margin-bottom: 10px;
@@ -57,7 +67,7 @@
   background: var(--blanco);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
-  padding: 18px 20px;
+  padding: 16px 20px;
 }
 
 .home-chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -71,15 +81,16 @@
   font-weight: 600;
 }
 
+/* ── Botones de acción ────────────────────────────────────────── */
 .home-actions {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .home-btn {
   flex: 1;
-  min-width: 200px;
+  min-width: 180px;
   padding: 14px 20px;
   border: none;
   border-radius: var(--radio);
@@ -94,11 +105,15 @@
 .home-btn--primary { background: var(--azul);  color: #fff; }
 .home-btn--success { background: var(--verde); color: #fff; }
 
+/* ── Info cards ───────────────────────────────────────────────── */
 .home-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 14px;
 }
+
+@media (min-width: 640px)  { .home-info-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .home-info-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .home-info-card {
   background: var(--blanco);

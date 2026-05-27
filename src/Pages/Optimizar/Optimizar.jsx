@@ -72,8 +72,9 @@ export default function Optimizar() {
           <SliderRow label="Generaciones"     value={params.num_generaciones} min={50}  max={500} step={10}   disabled={running} onChange={v => actualizarParams('num_generaciones', v)} />
           <SliderRow label="P. Cruzamiento"   value={params.prob_cruzamiento} min={0.3} max={1.0} step={0.05} disabled={running} onChange={v => actualizarParams('prob_cruzamiento', v)} fmt="pct" />
           <SliderRow label="P. Mutación"      value={params.prob_mutacion}    min={0.01}max={0.5} step={0.01} disabled={running} onChange={v => actualizarParams('prob_mutacion', v)} fmt="pct" />
-          <SliderRow label="Élite"            value={params.num_elite}        min={0}   max={10}  step={1}    disabled={running} onChange={v => actualizarParams('num_elite', v)} />
-          <SliderRow label="Paciencia"        value={params.paciencia}        min={5}   max={100} step={5}    disabled={running} onChange={v => actualizarParams('paciencia', v)} />
+          <SliderRow label="Élite"            value={params.num_elite}        min={0}   max={20}  step={1}    disabled={running} onChange={v => actualizarParams('num_elite', v)} />
+          <SliderRow label="Torneo (k)"      value={params.tam_torneo}       min={2}   max={20}  step={1}    disabled={running} onChange={v => actualizarParams('tam_torneo', v)} />
+          <SliderRow label="Paciencia"        value={params.paciencia}        min={5}   max={200} step={5}    disabled={running} onChange={v => actualizarParams('paciencia', v)} />
         </div>
 
         <div className="opt-form-actions">
